@@ -49,4 +49,19 @@ class PromptTemplate extends Model
     {
         return $this->hasMany(ContentGeneration::class);
     }
+
+    public function offerGenerations(): HasMany
+    {
+        return $this->hasMany(OfferGeneration::class);
+    }
+
+    public function strategyPlans(): HasMany
+    {
+        return $this->hasMany(StrategyPlan::class);
+    }
+
+    public function pageAnalyses(): HasMany
+    {
+        return $this->hasMany(PageAnalysis::class);
+    }
 }

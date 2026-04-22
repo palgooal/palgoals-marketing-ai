@@ -1,10 +1,13 @@
 <?php
 
 use App\Http\Controllers\Brand\BrandProfileController;
+use App\Http\Controllers\Analysis\PageAnalysisController;
 use App\Http\Controllers\AI\AiTestController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Content\ContentGenerationController;
 use App\Http\Controllers\Knowledge\KnowledgeDocumentController;
+use App\Http\Controllers\Offers\OfferGenerationController;
+use App\Http\Controllers\Plans\StrategyPlanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Prompts\PromptTemplateController;
 use App\Http\Controllers\Services\BrandServiceController;
@@ -75,6 +78,27 @@ Route::middleware('auth')->group(function () {
         Route::get('/{contentGeneration}', [ContentGenerationController::class, 'show'])->name('show');
     });
 
+    Route::prefix('offers')->name('offers.')->group(function () {
+        Route::get('/', [OfferGenerationController::class, 'index'])->name('index');
+        Route::get('/create', [OfferGenerationController::class, 'create'])->name('create');
+        Route::post('/generate', [OfferGenerationController::class, 'store'])->name('generate');
+        Route::get('/{offerGeneration}', [OfferGenerationController::class, 'show'])->name('show');
+    });
+
+    Route::prefix('plans')->name('plans.')->group(function () {
+        Route::get('/', [StrategyPlanController::class, 'index'])->name('index');
+        Route::get('/create', [StrategyPlanController::class, 'create'])->name('create');
+        Route::post('/generate', [StrategyPlanController::class, 'store'])->name('generate');
+        Route::get('/{strategyPlan}', [StrategyPlanController::class, 'show'])->name('show');
+    });
+
+    Route::prefix('analysis')->name('analysis.')->group(function () {
+        Route::get('/', [PageAnalysisController::class, 'index'])->name('index');
+        Route::get('/create', [PageAnalysisController::class, 'create'])->name('create');
+        Route::post('/run', [PageAnalysisController::class, 'store'])->name('run');
+        Route::get('/{pageAnalysis}', [PageAnalysisController::class, 'show'])->name('show');
+    });
+
     Route::prefix('ai')->name('ai.')->group(function () {
         Route::get('/test', [AiTestController::class, 'show'])->name('test.show');
         Route::post('/test', [AiTestController::class, 'store'])->name('test.store');
@@ -85,4 +109,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

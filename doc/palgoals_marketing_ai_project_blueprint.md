@@ -1,9 +1,23 @@
+## Progress Note
+
+- Step 9 completed.
+- Offers generation foundation added.
+- Next step: planner foundation or shared AI generation UX improvements.
+- Step 10 completed.
+- Planner foundation added.
+- Next step: analyzer foundation or shared AI generation UX consolidation.
+- Step 11 completed.
+- Analyzer foundation added.
+- Next step: shared AI generation UX consolidation and internal logs visibility.
+
 # Palgoals Marketing AI — Project Blueprint v1
 
 ## Vision
+
 بناء نظام تسويق ذكي احترافي خاص بشركة **Palgoals** في المرحلة الأولى، وقابل للتحول لاحقًا إلى منتج SaaS متعدد الشركات.
 
 الهدف من النظام:
+
 - العمل كمسوّق إلكتروني داخلي لشركة Palgoals
 - توليد المحتوى التسويقي والإعلانات والعروض والخطط
 - تحليل الصفحات التسويقية وتحسين التحويل
@@ -13,9 +27,11 @@
 ---
 
 ## Phase 1 Scope
+
 النسخة الأولى ستكون مخصصة لـ **Palgoals فقط**، مع تصميم داخلي قابل للتوسع لاحقًا.
 
 ### In Scope
+
 - Authentication + Admin Dashboard
 - Brand Knowledge Base
 - Content Engine
@@ -27,6 +43,7 @@
 - Generation History + Logs
 
 ### Out of Scope (Later)
+
 - Multi-tenant SaaS onboarding
 - Subscription billing for external companies
 - White-label support
@@ -37,6 +54,7 @@
 ---
 
 ## Recommended Tech Stack
+
 - **Framework:** Laravel 12
 - **Admin UI:** Blade + Tailwind CSS v4.1
 - **Database:** MySQL / MariaDB
@@ -51,10 +69,13 @@
 ---
 
 ## Project Name
+
 ### Recommended repository / app name
+
 `palgoals-marketing-ai`
 
 ### Suggested internal product name
+
 - Palgoals Marketing AI
 - Palgoals Growth OS
 - Palgoals AI Marketer
@@ -64,50 +85,55 @@
 ## High-Level Architecture
 
 ### Core Layers
+
 1. **Presentation Layer**
-   - Dashboard
-   - Content generation screens
-   - Planning screens
-   - Analyzer screens
-   - Knowledge management screens
+    - Dashboard
+    - Content generation screens
+    - Planning screens
+    - Analyzer screens
+    - Knowledge management screens
 
 2. **Application Layer**
-   - Use cases / Actions
-   - GenerateContentAction
-   - GenerateOfferAction
-   - BuildMarketingPlanAction
-   - AnalyzePageAction
+    - Use cases / Actions
+    - GenerateContentAction
+    - GenerateOfferAction
+    - BuildMarketingPlanAction
+    - AnalyzePageAction
 
 3. **Domain Layer**
-   - Brand profile rules
-   - Offer strategy rules
-   - Campaign logic
-   - Content objective definitions
-   - Prompt composition rules
+    - Brand profile rules
+    - Offer strategy rules
+    - Campaign logic
+    - Content objective definitions
+    - Prompt composition rules
 
 4. **Infrastructure Layer**
-   - AI provider clients
-   - Queue jobs
-   - Cache services
-   - Database repositories
-   - Logging / metrics
+    - AI provider clients
+    - Queue jobs
+    - Cache services
+    - Database repositories
+    - Logging / metrics
 
 ---
 
 ## Main Modules
 
 ### 1) Organization Module
+
 في المرحلة الأولى سيكون هناك سجل واحد فقط يمثل Palgoals.
 
 #### Responsibilities
+
 - تعريف الكيان الأساسي للشركة
 - ربط كل البيانات التسويقية به
 - تمهيد التوسع لاحقًا إلى SaaS
 
 ### 2) Brand Profile Module
+
 يمثل هوية Palgoals التسويقية.
 
 #### Includes
+
 - اسم العلامة
 - الوصف
 - الرؤية
@@ -120,9 +146,11 @@
 - CTA preferences
 
 ### 3) Services & Templates Knowledge Module
+
 قاعدة معرفة للخدمات والقوالب والفئات.
 
 #### Includes
+
 - الخدمات
 - القوالب
 - الفئات
@@ -132,9 +160,11 @@
 - أمثلة الاستخدام
 
 ### 4) Content Engine Module
+
 توليد المحتوى التسويقي.
 
 #### Outputs
+
 - Social media posts
 - Ad copy
 - Headlines
@@ -144,9 +174,11 @@
 - WhatsApp marketing copy
 
 ### 5) Offers Engine Module
+
 إنشاء عروض تسويقية وتجارية.
 
 #### Outputs
+
 - Limited-time offers
 - Bundle offers
 - Discount logic suggestions
@@ -154,9 +186,11 @@
 - Urgency messaging
 
 ### 6) Marketing Planner Module
+
 إنشاء خطط تسويقية.
 
 #### Outputs
+
 - Weekly marketing plan
 - Monthly campaign plan
 - Content calendar
@@ -164,14 +198,17 @@
 - Channel strategy suggestions
 
 ### 7) Page Analyzer Module
+
 تحليل الصفحات التسويقية.
 
 #### Inputs
+
 - رابط صفحة
 - محتوى HTML أو نص يدوي
 - وصف المنتج أو الخدمة
 
 #### Outputs
+
 - Conversion issues
 - Copy weaknesses
 - CTA recommendations
@@ -179,9 +216,11 @@
 - Suggested structural improvements
 
 ### 8) AI Gateway Module
+
 طبقة وسيطة بين التطبيق ومزوّدي الذكاء الاصطناعي.
 
 #### Responsibilities
+
 - اختيار الموديل المناسب حسب المهمة
 - إدارة الـ prompts
 - تتبع الاستخدام والتكلفة
@@ -189,9 +228,11 @@
 - دعم إضافة Claude لاحقًا بسهولة
 
 ### 9) Prompt Template Module
+
 إدارة قوالب التعليمات لكل مهمة.
 
 #### Examples
+
 - Generate social post
 - Generate ad campaign
 - Analyze landing page
@@ -199,9 +240,11 @@
 - Build weekly plan
 
 ### 10) History & Logs Module
+
 لحفظ كل عمليات التوليد والتحليل.
 
 #### Includes
+
 - الطلب الأصلي
 - الإعدادات
 - المخرجات
@@ -258,9 +301,11 @@ app/
 ## Database Design (Phase 1)
 
 ### 1. organizations
+
 يمثل الشركة أو الكيان.
 
 Suggested fields:
+
 - id
 - name
 - slug
@@ -269,9 +314,11 @@ Suggested fields:
 - updated_at
 
 ### 2. brand_profiles
+
 الهوية التسويقية الأساسية.
 
 Suggested fields:
+
 - id
 - organization_id
 - brand_name
@@ -288,9 +335,11 @@ Suggested fields:
 - updated_at
 
 ### 3. brand_services
+
 الخدمات التي تبيعها Palgoals.
 
 Suggested fields:
+
 - id
 - organization_id
 - title
@@ -306,9 +355,11 @@ Suggested fields:
 - updated_at
 
 ### 4. template_categories
+
 فئات القوالب.
 
 Suggested fields:
+
 - id
 - organization_id
 - name
@@ -320,9 +371,11 @@ Suggested fields:
 - updated_at
 
 ### 5. templates
+
 القوالب التسويقية/البيعية التي تقدمها الشركة.
 
 Suggested fields:
+
 - id
 - organization_id
 - template_category_id
@@ -339,9 +392,11 @@ Suggested fields:
 - updated_at
 
 ### 6. knowledge_documents
+
 مستندات المعرفة التسويقية.
 
 Suggested fields:
+
 - id
 - organization_id
 - title
@@ -354,9 +409,11 @@ Suggested fields:
 - updated_at
 
 ### 7. marketing_campaigns
+
 سجل الحملات التسويقية.
 
 Suggested fields:
+
 - id
 - organization_id
 - title
@@ -370,9 +427,11 @@ Suggested fields:
 - updated_at
 
 ### 8. content_generations
+
 مخرجات المحتوى.
 
 Suggested fields:
+
 - id
 - organization_id
 - marketing_campaign_id nullable
@@ -389,9 +448,11 @@ Suggested fields:
 - updated_at
 
 ### 9. offer_generations
+
 العروض التي تم توليدها.
 
 Suggested fields:
+
 - id
 - organization_id
 - title
@@ -404,9 +465,11 @@ Suggested fields:
 - updated_at
 
 ### 10. strategy_plans
+
 الخطط الأسبوعية / الشهرية.
 
 Suggested fields:
+
 - id
 - organization_id
 - period_type
@@ -421,9 +484,11 @@ Suggested fields:
 - updated_at
 
 ### 11. page_analyses
+
 نتائج تحليل الصفحات.
 
 Suggested fields:
+
 - id
 - organization_id
 - page_title
@@ -440,9 +505,11 @@ Suggested fields:
 - updated_at
 
 ### 12. ai_prompt_templates
+
 قوالب التعليمات.
 
 Suggested fields:
+
 - id
 - organization_id nullable
 - key
@@ -457,9 +524,11 @@ Suggested fields:
 - updated_at
 
 ### 13. ai_requests
+
 سجل جميع طلبات الذكاء الاصطناعي.
 
 Suggested fields:
+
 - id
 - organization_id
 - module
@@ -479,9 +548,11 @@ Suggested fields:
 - updated_at
 
 ### 14. settings
+
 إعدادات عامة للتطبيق.
 
 Suggested fields:
+
 - id
 - key
 - value_longtext
@@ -491,6 +562,7 @@ Suggested fields:
 ---
 
 ## Recommended Enums
+
 - OrganizationStatusEnum
 - CampaignChannelEnum
 - CampaignObjectiveEnum
@@ -576,9 +648,11 @@ Route::middleware(['auth'])->group(function () {
 ---
 
 ## First Dashboard Widgets
+
 أول نسخة من لوحة التحكم يجب أن تعطي انطباع “مسوّق رقمي جاهز للعمل”.
 
 ### Suggested widgets
+
 - Marketing summary today
 - Quick generate post
 - Quick generate ad
@@ -593,24 +667,29 @@ Route::middleware(['auth'])->group(function () {
 ## AI Gateway Design
 
 ### Goal
+
 فصل التطبيق عن مزود الذكاء الاصطناعي نفسه.
 
 ### Contracts
+
 - AIProviderInterface
 - PromptBuilderInterface
 - AIModelRouterInterface
 
 ### Suggested provider classes
+
 - OpenAIProvider
 - ClaudeProvider (later)
 
 ### Suggested services
+
 - AIRequestLoggerService
 - PromptTemplateResolverService
 - AIModelRouterService
 - AIExecutionService
 
 ### Example routing logic
+
 - Content generation → OpenAI
 - Offer generation → OpenAI
 - Strategy planning → OpenAI first
@@ -621,6 +700,7 @@ Route::middleware(['auth'])->group(function () {
 ## Suggested UI Sections
 
 ### Sidebar
+
 - Dashboard
 - Brand Profile
 - Services
@@ -639,6 +719,7 @@ Route::middleware(['auth'])->group(function () {
 ## Execution Roadmap
 
 ### Sprint 1 — Foundation
+
 - Create Laravel project
 - Install Tailwind
 - Setup auth
@@ -649,6 +730,7 @@ Route::middleware(['auth'])->group(function () {
 - Seed Palgoals organization
 
 ### Sprint 2 — Brand & Knowledge
+
 - Brand profile CRUD
 - Services CRUD
 - Template categories CRUD
@@ -656,6 +738,7 @@ Route::middleware(['auth'])->group(function () {
 - Knowledge documents CRUD
 
 ### Sprint 3 — AI Core
+
 - Build AI Gateway contracts
 - Add OpenAI provider
 - Add AI request logging
@@ -663,6 +746,7 @@ Route::middleware(['auth'])->group(function () {
 - Add queued generation pipeline
 
 ### Sprint 4 — Content Engine
+
 - Content generation form
 - Post generation
 - Ad generation
@@ -670,6 +754,7 @@ Route::middleware(['auth'])->group(function () {
 - History view
 
 ### Sprint 5 — Offers Engine
+
 - Offer generation form
 - Bundle suggestions
 - Seasonal offers
@@ -677,12 +762,14 @@ Route::middleware(['auth'])->group(function () {
 - History view
 
 ### Sprint 6 — Marketing Planner
+
 - Weekly plan generation
 - Monthly plan generation
 - Goal-based planning
 - Plan archive/history
 
 ### Sprint 7 — Page Analyzer
+
 - Page URL input
 - Manual text input fallback
 - Analysis report view
@@ -690,6 +777,7 @@ Route::middleware(['auth'])->group(function () {
 - Score + issue categories
 
 ### Sprint 8 — Polish
+
 - Dashboard widgets
 - filtering/search
 - export/copy UX
@@ -699,7 +787,9 @@ Route::middleware(['auth'])->group(function () {
 ---
 
 ## Suggested MVP Priorities
+
 إذا أردنا النسخة الأولى تكون قوية ومفيدة بسرعة، فالأولوية تكون:
+
 1. Brand Profile
 2. Services / Templates Knowledge
 3. AI Gateway
@@ -711,6 +801,7 @@ Route::middleware(['auth'])->group(function () {
 ---
 
 ## Important Product Principles
+
 - لا نبني “مولد نصوص” فقط
 - نبني “نظام تشغيل تسويقي”
 - كل مخرج يجب أن يكون قابلًا للاستخدام التجاري
@@ -722,10 +813,12 @@ Route::middleware(['auth'])->group(function () {
 ---
 
 ## Immediate Next Step
+
 الخطوة التنفيذية التالية:
 **إعداد الهيكل الأساسي للمشروع Laravel + أول migrations + أسماء Modules + ترتيب الشاشات**
 
 بعد ذلك نبدأ مباشرة في:
+
 1. Foundation
 2. Brand Profile
 3. AI Gateway
