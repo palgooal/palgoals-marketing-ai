@@ -64,4 +64,14 @@ class PromptTemplate extends Model
     {
         return $this->hasMany(PageAnalysis::class);
     }
+
+    public function versions(): HasMany
+    {
+        return $this->hasMany(PromptTemplateVersion::class);
+    }
+
+    public function latestVersion(): HasMany
+    {
+        return $this->versions()->latest('version_number')->limit(1);
+    }
 }

@@ -65,7 +65,7 @@ test('authenticated users can generate an offer', function () {
     expect($offerGeneration)->not->toBeNull();
     expect($offerGeneration->title)->toBe('Ramadan Savings');
     expect($offerGeneration->offer_type)->toBe('discount_offer');
-    expect($offerGeneration->status)->toBe('completed');
+    expect($offerGeneration->status)->toBe('draft');
     expect($offerGeneration->provider_name)->toBe('openai');
     expect($offerGeneration->model_name)->toBe('gpt-test');
     expect($offerGeneration->input_payload)->toMatchArray([
@@ -107,7 +107,7 @@ test('offer create screen can be prefilled from a previous generation', function
         'output_text' => 'Summer deal output',
         'provider_name' => 'openai',
         'model_name' => 'gpt-test',
-        'status' => 'completed',
+        'status' => 'draft',
     ]);
 
     $user = User::factory()->create();

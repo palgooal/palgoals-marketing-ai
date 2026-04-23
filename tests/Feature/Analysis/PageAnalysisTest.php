@@ -68,7 +68,7 @@ test('authenticated users can run a page analysis', function () {
     expect($pageAnalysis->page_title)->toBe('Landing Page Draft');
     expect($pageAnalysis->page_url)->toBe('https://example.com/landing');
     expect($pageAnalysis->page_type)->toBe('landing_page');
-    expect($pageAnalysis->status)->toBe('completed');
+    expect($pageAnalysis->status)->toBe('draft');
     expect($pageAnalysis->provider_name)->toBe('openai');
     expect($pageAnalysis->model_name)->toBe('gpt-test');
     expect($pageAnalysis->findings_text)->toBeNull();
@@ -120,7 +120,7 @@ test('page analysis create screen can be prefilled from a previous analysis', fu
         'score' => null,
         'provider_name' => 'openai',
         'model_name' => 'gpt-test',
-        'status' => 'completed',
+        'status' => 'draft',
     ]);
 
     $user = User::factory()->create();

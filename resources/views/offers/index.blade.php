@@ -18,7 +18,7 @@
         </div>
 
         <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-            <form method="GET" action="{{ route('offers.index') }}" class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <form method="GET" action="{{ route('offers.index') }}" class="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
                 <div>
                     <label for="search" class="text-sm font-medium text-gray-700">Title Search</label>
                     <input id="search" name="search" type="text" value="{{ $filters['search'] ?? '' }}"
@@ -49,6 +49,17 @@
                 </div>
 
                 <div>
+                    <label for="published" class="text-sm font-medium text-gray-700">Publishing</label>
+                    <select id="published" name="published"
+                        class="mt-1 block w-full rounded-md border-gray-300 text-sm shadow-sm focus:border-slate-700 focus:ring-slate-700">
+                        <option value="">All outputs</option>
+                        @foreach ($availablePublishedStates as $value => $label)
+                            <option value="{{ $value }}" @selected(($filters['published'] ?? '') === $value)>{{ $label }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div>
                     <label for="prompt_template_id" class="text-sm font-medium text-gray-700">Prompt Template</label>
                     <select id="prompt_template_id" name="prompt_template_id"
                         class="mt-1 block w-full rounded-md border-gray-300 text-sm shadow-sm focus:border-slate-700 focus:ring-slate-700">
@@ -60,7 +71,7 @@
                     </select>
                 </div>
 
-                <div class="flex items-end gap-3 md:col-span-2 xl:col-span-4">
+                <div class="flex items-end gap-3 md:col-span-2 xl:col-span-5">
                     <button type="submit"
                         class="inline-flex items-center rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">
                         Apply Filters
@@ -88,6 +99,8 @@
                             <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
                                 Status</th>
                             <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                Publishing</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
                                 Created</th>
                             <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500">
                                 Action</th>
@@ -95,13 +108,6 @@
                     </thead>
                     <tbody class="divide-y divide-gray-200">
                         @forelse ($offerGenerations as $offerGeneration)
-                            @php
-                                $statusClasses = match ($offerGeneration->status) {
-                                    'completed' => 'bg-green-100 text-green-700',
-                                    'failed' => 'bg-red-100 text-red-700',
-                                    default => 'bg-gray-100 text-gray-700',
-                                };
-                            @endphp
                             <tr>
                                 <td class="px-6 py-4 text-sm">
                                     <div class="font-medium text-gray-900">{{ $offerGeneration->title ?: '-' }}</div>
@@ -115,21 +121,37 @@
                                     {{ trim(($offerGeneration->provider_name ?: '-') . ' / ' . ($offerGeneration->model_name ?: '-')) }}
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-600">
-                                    <span
-                                        class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold {{ $statusClasses }}">
-                                        {{ ucfirst($offerGeneration->status) }}
-                                    </span>
+                                    @include('partials.ai.status-badge', [
+                                        'status' => $offerGeneration->status,
+                                    ])
+                                </td>
+                                <td class="px-6 py-4 text-sm text-gray-600">
+                                    <div class="space-y-1">
+                                        @include('partials.ai.publish-badge', [
+                                            'isPublished' => $offerGeneration->is_published,
+                                        ])
+
+                                        <div class="text-xs text-gray-500">
+                                            {{ $offerGeneration->published_at?->format('Y-m-d H:i') ?: 'Not published yet' }}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-600">
                                     {{ $offerGeneration->created_at?->format('Y-m-d H:i') }}</td>
                                 <td class="px-6 py-4 text-right text-sm">
-                                    <a href="{{ route('offers.show', $offerGeneration) }}"
-                                        class="font-medium text-slate-700 hover:text-slate-900">View</a>
+                                    <div class="flex justify-end gap-3">
+                                        <a href="{{ route('offers.show', $offerGeneration) }}"
+                                            class="font-medium text-slate-700 hover:text-slate-900">View</a>
+                                        <a href="{{ route('offers.package', $offerGeneration) }}"
+                                            class="font-medium text-slate-700 hover:text-slate-900">Package</a>
+                                        <a href="{{ route('offers.export-text', $offerGeneration) }}"
+                                            class="font-medium text-slate-700 hover:text-slate-900">Export Text</a>
+                                    </div>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="px-6 py-8 text-center text-sm text-gray-500">
+                                <td colspan="7" class="px-6 py-8 text-center text-sm text-gray-500">
                                     No offers matched the current filters.
                                 </td>
                             </tr>

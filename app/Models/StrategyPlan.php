@@ -26,6 +26,8 @@ class StrategyPlan extends Model
         'model_name',
         'provider_name',
         'status',
+        'is_published',
+        'published_at',
     ];
 
     /**
@@ -38,6 +40,8 @@ class StrategyPlan extends Model
         return [
             'goals_json' => 'array',
             'input_payload' => 'array',
+            'is_published' => 'boolean',
+            'published_at' => 'datetime',
         ];
     }
 

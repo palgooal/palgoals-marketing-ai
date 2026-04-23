@@ -28,6 +28,8 @@ class PageAnalysis extends Model
         'model_name',
         'provider_name',
         'status',
+        'is_published',
+        'published_at',
     ];
 
     /**
@@ -39,6 +41,8 @@ class PageAnalysis extends Model
     {
         return [
             'input_payload' => 'array',
+            'is_published' => 'boolean',
+            'published_at' => 'datetime',
         ];
     }
 

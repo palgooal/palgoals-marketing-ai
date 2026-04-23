@@ -66,7 +66,7 @@ test('authenticated users can generate a strategy plan', function () {
     expect($strategyPlan)->not->toBeNull();
     expect($strategyPlan->title)->toBe('May Growth Plan');
     expect($strategyPlan->period_type)->toBe('monthly');
-    expect($strategyPlan->status)->toBe('completed');
+    expect($strategyPlan->status)->toBe('draft');
     expect($strategyPlan->provider_name)->toBe('openai');
     expect($strategyPlan->model_name)->toBe('gpt-test');
     expect($strategyPlan->goals_json)->toBe([
@@ -112,7 +112,7 @@ test('strategy plan create screen can be prefilled from a previous plan', functi
         'output_text' => 'Weekly plan output',
         'provider_name' => 'openai',
         'model_name' => 'gpt-test',
-        'status' => 'completed',
+        'status' => 'draft',
     ]);
 
     $user = User::factory()->create();

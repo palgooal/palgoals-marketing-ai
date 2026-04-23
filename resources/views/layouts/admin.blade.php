@@ -53,9 +53,17 @@
                     Knowledge Documents
                 </a>
 
+                <div class="px-3 pt-5 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">AI Workflows
+                </div>
+
                 <a href="{{ route('prompts.index') }}"
                     class="{{ request()->routeIs('prompts.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }} block rounded-lg px-3 py-2 text-sm font-medium transition">
                     Prompt Templates
+                </a>
+
+                <a href="{{ route('content.index') }}"
+                    class="{{ request()->routeIs('content.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }} block rounded-lg px-3 py-2 text-sm font-medium transition">
+                    Content
                 </a>
 
                 <a href="{{ route('offers.index') }}"
@@ -71,6 +79,11 @@
                 <a href="{{ route('analysis.index') }}"
                     class="{{ request()->routeIs('analysis.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }} block rounded-lg px-3 py-2 text-sm font-medium transition">
                     Analysis
+                </a>
+
+                <a href="{{ route('logs.ai-requests.index') }}"
+                    class="{{ request()->routeIs('logs.ai-requests.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }} block rounded-lg px-3 py-2 text-sm font-medium transition">
+                    AI Logs
                 </a>
 
                 <a href="{{ route('settings.edit') }}"

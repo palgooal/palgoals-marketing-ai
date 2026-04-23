@@ -8,6 +8,7 @@ use App\Models\PromptTemplate;
 use App\Services\AI\AIExecutionService;
 use App\Services\AI\AIRequestLoggerService;
 use App\Services\AI\PromptTemplateRenderer;
+use App\Support\AIOutputStatuses;
 use Throwable;
 
 class PageAnalysisRunner
@@ -77,7 +78,7 @@ class PageAnalysisRunner
                 'score' => null,
                 'model_name' => $response['model_name'] ?? null,
                 'provider_name' => $response['provider_name'] ?? null,
-                'status' => 'completed',
+                'status' => AIOutputStatuses::DRAFT,
             ]);
 
             $this->aiRequestLoggerService->log($organization, [

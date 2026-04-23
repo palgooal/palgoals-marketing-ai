@@ -5,6 +5,18 @@
 
 @section('content')
     <div class="mx-auto max-w-5xl space-y-6">
+        @if (session('status'))
+            <div class="rounded-xl border border-green-200 bg-green-50 px-6 py-4 text-sm text-green-700 shadow-sm">
+                {{ session('status') }}
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="rounded-xl border border-red-200 bg-red-50 px-6 py-4 text-sm text-red-700 shadow-sm">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <div class="flex items-center justify-between gap-4">
             <div>
                 <h2 class="text-xl font-semibold text-gray-900">Generated Offer</h2>
@@ -12,6 +24,26 @@
             </div>
 
             <div class="flex items-center gap-3">
+                @include('partials.ai.copy-button', [
+                    'text' => $offerGeneration->output_text ?: 'No output was generated.',
+                    'label' => 'Copy Output',
+                ])
+
+                <a href="{{ route('offers.export-text', $offerGeneration) }}"
+                    class="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50">
+                    Export Text
+                </a>
+
+                <a href="{{ route('offers.package', $offerGeneration) }}"
+                    class="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50">
+                    View Package
+                </a>
+
+                <a href="{{ route('offers.export-package-text', $offerGeneration) }}"
+                    class="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50">
+                    Export Package Text
+                </a>
+
                 <a href="{{ route('offers.create', ['from' => $offerGeneration->id]) }}"
                     class="inline-flex items-center rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">
                     Run Again
@@ -24,13 +56,77 @@
             </div>
         </div>
 
-        @php
-            $statusClasses = match ($offerGeneration->status) {
-                'completed' => 'bg-green-100 text-green-700',
-                'failed' => 'bg-red-100 text-red-700',
-                default => 'bg-gray-100 text-gray-700',
-            };
-        @endphp
+        <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div class="grid gap-4 md:grid-cols-2">
+                    <div>
+                        <div class="text-sm font-semibold uppercase tracking-wide text-gray-500">Review Status</div>
+                        <div class="mt-3">
+                            @include('partials.ai.status-badge', ['status' => $offerGeneration->status])
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="text-sm font-semibold uppercase tracking-wide text-gray-500">Publishing Status</div>
+                        <div class="mt-3 flex flex-wrap items-center gap-3">
+                            @include('partials.ai.publish-badge', [
+                                'isPublished' => $offerGeneration->is_published,
+                            ])
+
+                            <span class="text-xs text-gray-500">
+                                {{ $offerGeneration->published_at?->format('Y-m-d H:i') ?: 'Not published yet' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-3">
+                    @if (\App\Support\AIOutputStatuses::canMarkReviewed($offerGeneration->status))
+                        <form method="POST" action="{{ route('offers.mark-reviewed', $offerGeneration) }}">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit"
+                                class="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50">
+                                Mark as Reviewed
+                            </button>
+                        </form>
+                    @endif
+
+                    @if (\App\Support\AIOutputStatuses::canMarkApproved($offerGeneration->status))
+                        <form method="POST" action="{{ route('offers.mark-approved', $offerGeneration) }}">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit"
+                                class="inline-flex items-center rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">
+                                Mark as Approved
+                            </button>
+                        </form>
+                    @endif
+
+                    @if ($offerGeneration->is_published)
+                        <form method="POST" action="{{ route('offers.unpublish', $offerGeneration) }}">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit"
+                                class="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50">
+                                Unpublish Output
+                            </button>
+                        </form>
+                    @elseif (\App\Support\AIOutputStatuses::canPublish($offerGeneration->status))
+                        <form method="POST" action="{{ route('offers.publish', $offerGeneration) }}">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit"
+                                class="inline-flex items-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-500">
+                                Publish Output
+                            </button>
+                        </form>
+                    @else
+                        <div class="text-xs text-gray-500">Publish is available after review or approval.</div>
+                    @endif
+                </div>
+            </div>
+        </div>
 
         <div class="grid gap-6 lg:grid-cols-[320px_1fr]">
             <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
@@ -39,7 +135,15 @@
                 <dl class="mt-4 space-y-4 text-sm text-gray-700">
                     <div>
                         <dt class="font-medium text-gray-500">Title</dt>
-                        <dd class="mt-1">{{ $offerGeneration->title ?: '-' }}</dd>
+                        <dd class="mt-1 flex items-center gap-2">
+                            <span>{{ $offerGeneration->title ?: '-' }}</span>
+                            @if (filled($offerGeneration->title))
+                                @include('partials.ai.copy-button', [
+                                    'text' => $offerGeneration->title,
+                                    'label' => 'Copy Title',
+                                ])
+                            @endif
+                        </dd>
                     </div>
                     <div>
                         <dt class="font-medium text-gray-500">Prompt Template</dt>
@@ -51,48 +155,55 @@
                         <dt class="font-medium text-gray-500">Offer Type</dt>
                         <dd class="mt-1">{{ str($offerGeneration->offer_type)->replace('_', ' ')->title() }}</dd>
                     </div>
+                    @include('partials.ai.result-meta', [
+                        'providerName' => $offerGeneration->provider_name,
+                        'modelName' => $offerGeneration->model_name,
+                        'status' => $offerGeneration->status,
+                        'createdAt' => $offerGeneration->created_at,
+                    ])
                     <div>
-                        <dt class="font-medium text-gray-500">Provider</dt>
-                        <dd class="mt-1">{{ $offerGeneration->provider_name ?: '-' }}</dd>
-                    </div>
-                    <div>
-                        <dt class="font-medium text-gray-500">Model</dt>
-                        <dd class="mt-1">{{ $offerGeneration->model_name ?: '-' }}</dd>
-                    </div>
-                    <div>
-                        <dt class="font-medium text-gray-500">Status</dt>
-                        <dd class="mt-1">
-                            <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold {{ $statusClasses }}">
-                                {{ ucfirst($offerGeneration->status) }}
-                            </span>
-                        </dd>
-                    </div>
-                    <div>
-                        <dt class="font-medium text-gray-500">Created</dt>
-                        <dd class="mt-1">{{ $offerGeneration->created_at?->format('Y-m-d H:i') ?: '-' }}</dd>
+                        <dt class="font-medium text-gray-500">Published At</dt>
+                        <dd class="mt-1">{{ $offerGeneration->published_at?->format('Y-m-d H:i') ?: '-' }}</dd>
                     </div>
                 </dl>
             </div>
 
             <div class="space-y-6">
                 <div class="rounded-xl border border-gray-200 bg-white shadow-sm">
-                    <div class="border-b border-gray-200 px-6 py-4">
+                    <div class="flex items-center justify-between gap-3 border-b border-gray-200 px-6 py-4">
                         <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-500">Rendered Output</h3>
+
+                        @include('partials.ai.copy-button', [
+                            'text' => $offerGeneration->output_text ?: 'No output was generated.',
+                            'label' => 'Copy Output',
+                        ])
                     </div>
 
                     <div class="px-6 py-6">
-                        <div class="whitespace-pre-wrap text-sm leading-7 text-gray-800">
+                        <div class="rounded-lg bg-gray-50 p-4 whitespace-pre-wrap text-sm leading-7 text-gray-800">
                             {{ $offerGeneration->output_text ?: 'No output was generated.' }}</div>
                     </div>
                 </div>
 
                 <div class="rounded-xl border border-gray-200 bg-white shadow-sm">
-                    <div class="border-b border-gray-200 px-6 py-4">
+                    <div class="flex items-center justify-between gap-3 border-b border-gray-200 px-6 py-4">
                         <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-500">Input Payload Preview</h3>
+
+                        @include('partials.ai.copy-button', [
+                            'text' =>
+                                json_encode(
+                                    $offerGeneration->input_payload ?? [],
+                                    JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?:
+                                '{}',
+                            'label' => 'Copy JSON',
+                        ])
                     </div>
 
                     <div class="px-6 py-6">
-                        <pre class="overflow-x-auto rounded-lg bg-slate-950 p-4 text-sm text-slate-100">{{ json_encode($offerGeneration->input_payload ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) }}</pre>
+                        @include('partials.ai.json-preview', [
+                            'payload' => $offerGeneration->input_payload,
+                            'emptyText' => 'No input payload was stored.',
+                        ])
                     </div>
                 </div>
             </div>

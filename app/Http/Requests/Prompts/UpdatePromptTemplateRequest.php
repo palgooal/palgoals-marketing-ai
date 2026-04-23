@@ -30,9 +30,22 @@ class UpdatePromptTemplateRequest extends FormRequest
             'description' => ['nullable', 'string'],
             'system_prompt' => ['nullable', 'string'],
             'user_prompt_template' => ['required', 'string'],
-            'module' => ['required', 'string', 'max:100'],
+            'module' => ['required', 'string', 'max:100', Rule::in(['content', 'offers', 'plans', 'analysis'])],
             'version' => ['required', 'integer', 'min:1'],
             'is_active' => ['nullable', 'boolean'],
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'key' => 'prompt key',
+            'title' => 'title',
+            'module' => 'module',
+            'version' => 'version',
+            'system_prompt' => 'system prompt',
+            'user_prompt_template' => 'user prompt template',
+            'is_active' => 'active status',
         ];
     }
 }

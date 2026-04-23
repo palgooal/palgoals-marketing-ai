@@ -6,9 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Content\StoreContentGenerationRequest;
 use App\Models\ContentGeneration;
 use App\Services\Content\ContentGenerationRunner;
+use App\Support\AIPackageTextFormatter;
+use App\Support\AIOutputStatuses;
+use App\Support\AITextExportFormatter;
 use App\Support\CurrentOrganization;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Throwable;
 
@@ -16,6 +20,8 @@ class ContentGenerationController extends Controller
 {
     public function __construct(
         private readonly ContentGenerationRunner $contentGenerationRunner,
+        private readonly AITextExportFormatter $aiTextExportFormatter,
+        private readonly AIPackageTextFormatter $aiPackageTextFormatter,
     ) {}
 
     public function index(Request $request): View
@@ -29,15 +35,13 @@ class ContentGenerationController extends Controller
 
         return view('content.index', [
             'contentGenerations' => $query->paginate(10)->withQueryString(),
-            'filters' => $request->only(['type', 'status', 'language', 'prompt_template_id', 'search']),
+            'filters' => $request->only(['type', 'status', 'published', 'language', 'prompt_template_id', 'search']),
             'promptTemplates' => $organization->promptTemplates()
                 ->orderBy('title')
                 ->get(['id', 'title']),
             'availableTypes' => $this->availableTypes(),
-            'availableStatuses' => [
-                'completed' => 'Completed',
-                'failed' => 'Failed',
-            ],
+            'availableStatuses' => AIOutputStatuses::labels(),
+            'availablePublishedStates' => $this->availablePublishedStates(),
             'availableLanguages' => $organization->contentGenerations()
                 ->whereNotNull('language')
                 ->where('language', '!=', '')
@@ -99,10 +103,97 @@ class ContentGenerationController extends Controller
     public function show(ContentGeneration $contentGeneration): View
     {
         return view('content.show', [
-            'contentGeneration' => CurrentOrganization::get()->contentGenerations()
-                ->with('promptTemplate')
-                ->findOrFail($contentGeneration->getKey()),
+            'contentGeneration' => $this->findContentGeneration($contentGeneration),
         ]);
+    }
+
+    public function package(ContentGeneration $contentGeneration): View
+    {
+        return view('content.package', [
+            'contentGeneration' => $this->findContentGeneration($contentGeneration),
+        ]);
+    }
+
+    public function markReviewed(ContentGeneration $contentGeneration): RedirectResponse
+    {
+        $contentGeneration = $this->findContentGeneration($contentGeneration);
+        $contentGeneration->update(['status' => AIOutputStatuses::REVIEWED]);
+
+        return redirect()
+            ->route('content.show', $contentGeneration)
+            ->with('status', 'Content marked as reviewed.');
+    }
+
+    public function markApproved(ContentGeneration $contentGeneration): RedirectResponse
+    {
+        $contentGeneration = $this->findContentGeneration($contentGeneration);
+        $contentGeneration->update(['status' => AIOutputStatuses::APPROVED]);
+
+        return redirect()
+            ->route('content.show', $contentGeneration)
+            ->with('status', 'Content marked as approved.');
+    }
+
+    public function publish(ContentGeneration $contentGeneration): RedirectResponse
+    {
+        $contentGeneration = $this->findContentGeneration($contentGeneration);
+
+        if (! AIOutputStatuses::canPublish($contentGeneration->status)) {
+            return redirect()
+                ->route('content.show', $contentGeneration)
+                ->with('error', 'Content can only be published after review or approval.');
+        }
+
+        $contentGeneration->update([
+            'is_published' => true,
+            'published_at' => $contentGeneration->published_at ?? now(),
+        ]);
+
+        return redirect()
+            ->route('content.show', $contentGeneration)
+            ->with('status', 'Content published successfully.');
+    }
+
+    public function unpublish(ContentGeneration $contentGeneration): RedirectResponse
+    {
+        $contentGeneration = $this->findContentGeneration($contentGeneration);
+        $contentGeneration->update([
+            'is_published' => false,
+        ]);
+
+        return redirect()
+            ->route('content.show', $contentGeneration)
+            ->with('status', 'Content unpublished successfully.');
+    }
+
+    public function exportText(ContentGeneration $contentGeneration): Response
+    {
+        $contentGeneration = $this->findContentGeneration($contentGeneration);
+
+        return response($this->aiTextExportFormatter->formatContent($contentGeneration), 200, [
+            'Content-Type' => 'text/plain; charset=UTF-8',
+        ]);
+    }
+
+    public function exportPackageText(ContentGeneration $contentGeneration): Response
+    {
+        $contentGeneration = $this->findContentGeneration($contentGeneration);
+
+        return response($this->aiPackageTextFormatter->formatContent($contentGeneration), 200, [
+            'Content-Type' => 'text/plain; charset=UTF-8',
+        ]);
+    }
+
+    private function findContentGeneration(ContentGeneration $contentGeneration): ContentGeneration
+    {
+        return CurrentOrganization::get()->contentGenerations()
+            ->with('promptTemplate')
+            ->findOrFail($contentGeneration->getKey());
+    }
+
+    private function databaseStatusesFor(string $status): array
+    {
+        return AIOutputStatuses::databaseValuesFor($status);
     }
 
     /**
@@ -115,7 +206,11 @@ class ContentGenerationController extends Controller
         });
 
         $query->when($request->filled('status'), function ($builder) use ($request): void {
-            $builder->where('status', $request->string('status')->toString());
+            $builder->whereIn('status', $this->databaseStatusesFor($request->string('status')->toString()));
+        });
+
+        $query->when($request->filled('published'), function ($builder) use ($request): void {
+            $builder->where('is_published', $request->string('published')->toString() === 'published');
         });
 
         $query->when($request->filled('language'), function ($builder) use ($request): void {
@@ -142,6 +237,17 @@ class ContentGenerationController extends Controller
             'social_post' => 'Social Post',
             'ad_copy' => 'Ad Copy',
             'landing_copy' => 'Landing Copy',
+        ];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function availablePublishedStates(): array
+    {
+        return [
+            'published' => 'Published',
+            'unpublished' => 'Unpublished',
         ];
     }
 

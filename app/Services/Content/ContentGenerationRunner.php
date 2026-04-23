@@ -8,6 +8,7 @@ use App\Models\PromptTemplate;
 use App\Services\AI\AIExecutionService;
 use App\Services\AI\AIRequestLoggerService;
 use App\Services\AI\PromptTemplateRenderer;
+use App\Support\AIOutputStatuses;
 use Throwable;
 
 class ContentGenerationRunner
@@ -63,7 +64,7 @@ class ContentGenerationRunner
                 'tone' => $attributes['tone'] ?? null,
                 'model_name' => $response['model_name'] ?? null,
                 'provider_name' => $response['provider_name'] ?? null,
-                'status' => 'completed',
+                'status' => AIOutputStatuses::DRAFT,
             ]);
 
             $this->aiRequestLoggerService->log($organization, [
@@ -90,7 +91,7 @@ class ContentGenerationRunner
                 'provider_name' => config('ai.default_provider'),
                 'model_name' => config('ai.providers.openai.model'),
                 'prompt_snapshot' => trim(
-                    "system_prompt:\n".($renderedPrompt['system_prompt'] ?? '')."\n\nuser_prompt:\n".$renderedPrompt['user_prompt']
+                    "system_prompt:\n" . ($renderedPrompt['system_prompt'] ?? '') . "\n\nuser_prompt:\n" . $renderedPrompt['user_prompt']
                 ),
                 'input_payload' => $this->buildLogInputPayload($promptTemplate, $attributes, $inputPayload),
                 'output_payload' => null,

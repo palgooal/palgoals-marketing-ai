@@ -6,6 +6,7 @@ use App\Http\Controllers\AI\AiTestController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Content\ContentGenerationController;
 use App\Http\Controllers\Knowledge\KnowledgeDocumentController;
+use App\Http\Controllers\Logs\AiRequestLogController;
 use App\Http\Controllers\Offers\OfferGenerationController;
 use App\Http\Controllers\Plans\StrategyPlanController;
 use App\Http\Controllers\ProfileController;
@@ -67,6 +68,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [PromptTemplateController::class, 'index'])->name('index');
         Route::get('/create', [PromptTemplateController::class, 'create'])->name('create');
         Route::post('/', [PromptTemplateController::class, 'store'])->name('store');
+        Route::post('/{promptTemplate}/duplicate', [PromptTemplateController::class, 'duplicate'])->name('duplicate');
+        Route::patch('/{promptTemplate}/toggle-active', [PromptTemplateController::class, 'toggleActive'])->name('toggle-active');
+        Route::get('/{promptTemplate}/compare', [PromptTemplateController::class, 'compare'])->name('compare');
+        Route::get('/{promptTemplate}/versions/{promptTemplateVersion}', [PromptTemplateController::class, 'showVersion'])->name('versions.show');
+        Route::post('/{promptTemplate}/versions/{promptTemplateVersion}/revert', [PromptTemplateController::class, 'revertVersion'])->name('versions.revert');
         Route::get('/{promptTemplate}/edit', [PromptTemplateController::class, 'edit'])->name('edit');
         Route::put('/{promptTemplate}', [PromptTemplateController::class, 'update'])->name('update');
     });
@@ -75,6 +81,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [ContentGenerationController::class, 'index'])->name('index');
         Route::get('/create', [ContentGenerationController::class, 'create'])->name('create');
         Route::post('/generate', [ContentGenerationController::class, 'store'])->name('generate');
+        Route::get('/{contentGeneration}/package', [ContentGenerationController::class, 'package'])->name('package');
+        Route::get('/{contentGeneration}/export-text', [ContentGenerationController::class, 'exportText'])->name('export-text');
+        Route::get('/{contentGeneration}/export-package-text', [ContentGenerationController::class, 'exportPackageText'])->name('export-package-text');
+        Route::patch('/{contentGeneration}/mark-reviewed', [ContentGenerationController::class, 'markReviewed'])->name('mark-reviewed');
+        Route::patch('/{contentGeneration}/mark-approved', [ContentGenerationController::class, 'markApproved'])->name('mark-approved');
+        Route::patch('/{contentGeneration}/publish', [ContentGenerationController::class, 'publish'])->name('publish');
+        Route::patch('/{contentGeneration}/unpublish', [ContentGenerationController::class, 'unpublish'])->name('unpublish');
         Route::get('/{contentGeneration}', [ContentGenerationController::class, 'show'])->name('show');
     });
 
@@ -82,6 +95,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [OfferGenerationController::class, 'index'])->name('index');
         Route::get('/create', [OfferGenerationController::class, 'create'])->name('create');
         Route::post('/generate', [OfferGenerationController::class, 'store'])->name('generate');
+        Route::get('/{offerGeneration}/package', [OfferGenerationController::class, 'package'])->name('package');
+        Route::get('/{offerGeneration}/export-text', [OfferGenerationController::class, 'exportText'])->name('export-text');
+        Route::get('/{offerGeneration}/export-package-text', [OfferGenerationController::class, 'exportPackageText'])->name('export-package-text');
+        Route::patch('/{offerGeneration}/mark-reviewed', [OfferGenerationController::class, 'markReviewed'])->name('mark-reviewed');
+        Route::patch('/{offerGeneration}/mark-approved', [OfferGenerationController::class, 'markApproved'])->name('mark-approved');
+        Route::patch('/{offerGeneration}/publish', [OfferGenerationController::class, 'publish'])->name('publish');
+        Route::patch('/{offerGeneration}/unpublish', [OfferGenerationController::class, 'unpublish'])->name('unpublish');
         Route::get('/{offerGeneration}', [OfferGenerationController::class, 'show'])->name('show');
     });
 
@@ -89,6 +109,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [StrategyPlanController::class, 'index'])->name('index');
         Route::get('/create', [StrategyPlanController::class, 'create'])->name('create');
         Route::post('/generate', [StrategyPlanController::class, 'store'])->name('generate');
+        Route::get('/{strategyPlan}/package', [StrategyPlanController::class, 'package'])->name('package');
+        Route::get('/{strategyPlan}/export-text', [StrategyPlanController::class, 'exportText'])->name('export-text');
+        Route::get('/{strategyPlan}/export-package-text', [StrategyPlanController::class, 'exportPackageText'])->name('export-package-text');
+        Route::patch('/{strategyPlan}/mark-reviewed', [StrategyPlanController::class, 'markReviewed'])->name('mark-reviewed');
+        Route::patch('/{strategyPlan}/mark-approved', [StrategyPlanController::class, 'markApproved'])->name('mark-approved');
+        Route::patch('/{strategyPlan}/publish', [StrategyPlanController::class, 'publish'])->name('publish');
+        Route::patch('/{strategyPlan}/unpublish', [StrategyPlanController::class, 'unpublish'])->name('unpublish');
         Route::get('/{strategyPlan}', [StrategyPlanController::class, 'show'])->name('show');
     });
 
@@ -96,7 +123,19 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [PageAnalysisController::class, 'index'])->name('index');
         Route::get('/create', [PageAnalysisController::class, 'create'])->name('create');
         Route::post('/run', [PageAnalysisController::class, 'store'])->name('run');
+        Route::get('/{pageAnalysis}/package', [PageAnalysisController::class, 'package'])->name('package');
+        Route::get('/{pageAnalysis}/export-text', [PageAnalysisController::class, 'exportText'])->name('export-text');
+        Route::get('/{pageAnalysis}/export-package-text', [PageAnalysisController::class, 'exportPackageText'])->name('export-package-text');
+        Route::patch('/{pageAnalysis}/mark-reviewed', [PageAnalysisController::class, 'markReviewed'])->name('mark-reviewed');
+        Route::patch('/{pageAnalysis}/mark-approved', [PageAnalysisController::class, 'markApproved'])->name('mark-approved');
+        Route::patch('/{pageAnalysis}/publish', [PageAnalysisController::class, 'publish'])->name('publish');
+        Route::patch('/{pageAnalysis}/unpublish', [PageAnalysisController::class, 'unpublish'])->name('unpublish');
         Route::get('/{pageAnalysis}', [PageAnalysisController::class, 'show'])->name('show');
+    });
+
+    Route::prefix('logs/ai-requests')->name('logs.ai-requests.')->group(function () {
+        Route::get('/', [AiRequestLogController::class, 'index'])->name('index');
+        Route::get('/{aiRequest}', [AiRequestLogController::class, 'show'])->name('show');
     });
 
     Route::prefix('ai')->name('ai.')->group(function () {

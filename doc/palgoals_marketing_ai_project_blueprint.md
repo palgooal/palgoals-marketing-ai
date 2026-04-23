@@ -9,6 +9,36 @@
 - Step 11 completed.
 - Analyzer foundation added.
 - Next step: shared AI generation UX consolidation and internal logs visibility.
+- Step 12 completed.
+- AI UX consolidation and internal logs visibility added.
+- Next step: prompt template improvements or first prompt governance/versioning polish.
+- Step 13 completed.
+- Prompt template governance and usability polish added.
+- Next step: review/approval-lite for generated outputs or prompt versioning groundwork.
+- Step 14 completed.
+- Review/approval-lite added for generated outputs.
+- Next step: prompt versioning groundwork or export/copy usability polish.
+- Step 15 completed.
+- Export/copy usability polish added.
+- Next step: prompt versioning groundwork or lightweight output publishing workflow.
+- Step 16 completed.
+- Prompt versioning groundwork added.
+- Next step: lightweight output publishing workflow or prompt history/revert polish.
+- Step 17 completed.
+- Lightweight output publishing workflow added.
+- Next step: prompt history/revert polish or internal content package/export improvements.
+- Step 18 completed.
+- Prompt history preview and revert polish added.
+- Next step: internal content package/export improvements or prompt comparison polish.
+- Step 19 completed.
+- Internal content package/export improvements added.
+- Step 20 completed.
+- Lightweight prompt usage insights added.
+- Step 21 completed.
+- Lightweight prompt comparison polish added.
+- Step 22 completed.
+- Internal AI workflow health insights added.
+- Next step: lightweight prompt lifecycle cleanup or AI request retry-lite investigation UX.
 
 # Palgoals Marketing AI — Project Blueprint v1
 
