@@ -25,9 +25,9 @@ Supported lightweight comparisons:
 Example usage:
 
 - compare snapshot to current live prompt:
-  - `/prompt-templates/{promptTemplate}/compare?from_version_id=12`
+    - `/prompt-templates/{promptTemplate}/compare?from_version_id=12`
 - compare one snapshot to another snapshot:
-  - `/prompt-templates/{promptTemplate}/compare?from_version_id=12&to_version_id=15`
+    - `/prompt-templates/{promptTemplate}/compare?from_version_id=12&to_version_id=15`
 
 ## Compared Fields
 

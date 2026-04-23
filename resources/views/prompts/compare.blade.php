@@ -8,7 +8,8 @@
         <div class="flex items-center justify-between gap-4">
             <div>
                 <h2 class="text-xl font-semibold text-gray-900">Prompt Comparison</h2>
-                <p class="mt-1 text-sm text-gray-600">Lightweight field comparison for this prompt template without a full diff engine.</p>
+                <p class="mt-1 text-sm text-gray-600">Lightweight field comparison for this prompt template without a full
+                    diff engine.</p>
             </div>
 
             <a href="{{ route('prompts.edit', $promptTemplate) }}"
@@ -31,8 +32,10 @@
 
         <div class="space-y-4">
             @foreach ($comparison['fields'] as $field)
-                <div class="rounded-xl border {{ $field['changed'] ? 'border-amber-200 bg-amber-50' : 'border-gray-200 bg-white' }} shadow-sm">
-                    <div class="flex items-center justify-between gap-4 border-b {{ $field['changed'] ? 'border-amber-200' : 'border-gray-200' }} px-6 py-4">
+                <div
+                    class="rounded-xl border {{ $field['changed'] ? 'border-amber-200 bg-amber-50' : 'border-gray-200 bg-white' }} shadow-sm">
+                    <div
+                        class="flex items-center justify-between gap-4 border-b {{ $field['changed'] ? 'border-amber-200' : 'border-gray-200' }} px-6 py-4">
                         <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-500">{{ $field['label'] }}</h3>
 
                         <span
@@ -43,15 +46,19 @@
 
                     <div class="grid gap-px md:grid-cols-2">
                         <div class="px-6 py-5 {{ $field['changed'] ? 'bg-amber-50/60' : 'bg-white' }}">
-                            <div class="text-xs font-semibold uppercase tracking-wide text-gray-500">{{ $comparison['from']['label'] }}</div>
-                            <div class="mt-3 whitespace-pre-wrap rounded-lg bg-white/80 p-4 text-sm leading-7 text-gray-800 ring-1 ring-inset ring-gray-200">
+                            <div class="text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                {{ $comparison['from']['label'] }}</div>
+                            <div
+                                class="mt-3 whitespace-pre-wrap rounded-lg bg-white/80 p-4 text-sm leading-7 text-gray-800 ring-1 ring-inset ring-gray-200">
                                 {{ filled($field['from']) ? $field['from'] : '-' }}
                             </div>
                         </div>
 
                         <div class="px-6 py-5 {{ $field['changed'] ? 'bg-amber-50/30' : 'bg-white' }}">
-                            <div class="text-xs font-semibold uppercase tracking-wide text-gray-500">{{ $comparison['to']['label'] }}</div>
-                            <div class="mt-3 whitespace-pre-wrap rounded-lg bg-white/80 p-4 text-sm leading-7 text-gray-800 ring-1 ring-inset ring-gray-200">
+                            <div class="text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                {{ $comparison['to']['label'] }}</div>
+                            <div
+                                class="mt-3 whitespace-pre-wrap rounded-lg bg-white/80 p-4 text-sm leading-7 text-gray-800 ring-1 ring-inset ring-gray-200">
                                 {{ filled($field['to']) ? $field['to'] : '-' }}
                             </div>
                         </div>

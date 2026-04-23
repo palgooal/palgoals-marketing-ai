@@ -95,10 +95,12 @@
             <div class="flex items-center justify-between gap-4">
                 <div>
                     <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-500">Workflow Health</h3>
-                    <p class="mt-1 text-sm text-gray-600">Compact internal health counts across AI requests and workflow outputs.</p>
+                    <p class="mt-1 text-sm text-gray-600">Compact internal health counts across AI requests and workflow
+                        outputs.</p>
                 </div>
 
-                <a href="{{ route('logs.ai-requests.index') }}" class="text-sm font-medium text-slate-700 hover:text-slate-900">
+                <a href="{{ route('logs.ai-requests.index') }}"
+                    class="text-sm font-medium text-slate-700 hover:text-slate-900">
                     Review AI Logs
                 </a>
             </div>
@@ -147,7 +149,8 @@
             <div class="flex items-center justify-between gap-4">
                 <div>
                     <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-500">Stale Drafts</h3>
-                    <p class="mt-1 text-sm text-gray-600">Draft outputs older than {{ $staleDraftInsights['days'] }} days that may need review or cleanup.</p>
+                    <p class="mt-1 text-sm text-gray-600">Draft outputs older than {{ $staleDraftInsights['days'] }} days
+                        that may need review or cleanup.</p>
                 </div>
 
                 <div class="inline-flex rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-800">
@@ -157,7 +160,8 @@
 
             <div class="mt-4 grid gap-4 md:grid-cols-[220px_1fr]">
                 <div class="rounded-lg border border-amber-200 bg-amber-50 p-4">
-                    <p class="text-xs font-semibold uppercase tracking-wide text-amber-700">Older Than {{ $staleDraftInsights['days'] }} Days</p>
+                    <p class="text-xs font-semibold uppercase tracking-wide text-amber-700">Older Than
+                        {{ $staleDraftInsights['days'] }} Days</p>
                     <p class="mt-2 text-2xl font-semibold text-amber-900">{{ $staleDraftInsights['count'] }}</p>
                 </div>
 

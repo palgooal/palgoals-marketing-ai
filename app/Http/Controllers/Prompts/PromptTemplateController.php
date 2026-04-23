@@ -104,7 +104,7 @@ class PromptTemplateController extends Controller
     {
         $promptTemplate = $this->findAccessiblePromptTemplate($promptTemplate)
             ->load([
-                'versions' => fn ($query) => $query->latest('version_number')->limit(5),
+                'versions' => fn($query) => $query->latest('version_number')->limit(5),
             ]);
 
         $fromVersion = $this->resolveComparisonVersion(

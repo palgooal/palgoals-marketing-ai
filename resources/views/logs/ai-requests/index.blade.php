@@ -127,21 +127,26 @@
                                 <td class="px-6 py-4 text-sm text-gray-600">
                                     <div class="flex flex-wrap gap-2">
                                         @if ($aiRequest->status === 'failed')
-                                            <span class="inline-flex rounded-full bg-red-100 px-2.5 py-1 text-xs font-semibold text-red-700">Failed</span>
+                                            <span
+                                                class="inline-flex rounded-full bg-red-100 px-2.5 py-1 text-xs font-semibold text-red-700">Failed</span>
                                         @endif
 
                                         @if ($aiWorkflowHealthInsights->isSlowRequest($aiRequest->latency_ms))
-                                            <span class="inline-flex rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-700">Slow</span>
+                                            <span
+                                                class="inline-flex rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-700">Slow</span>
                                         @endif
 
                                         @if ($aiWorkflowHealthInsights->hasMissingOutputOrError($aiRequest->output_payload, $aiRequest->error_message))
-                                            <span class="inline-flex rounded-full bg-gray-100 px-2.5 py-1 text-xs font-semibold text-gray-700">Missing Output / Error</span>
+                                            <span
+                                                class="inline-flex rounded-full bg-gray-100 px-2.5 py-1 text-xs font-semibold text-gray-700">Missing
+                                                Output / Error</span>
                                         @endif
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-600">
                                     <div class="space-y-1">
-                                        <div>{{ $aiRequest->latency_ms !== null ? $aiRequest->latency_ms . ' ms' : '-' }}</div>
+                                        <div>{{ $aiRequest->latency_ms !== null ? $aiRequest->latency_ms . ' ms' : '-' }}
+                                        </div>
                                         <div class="text-xs text-gray-500">Slow at {{ $slowRequestMs }}+ ms</div>
                                     </div>
                                 </td>

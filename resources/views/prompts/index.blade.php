@@ -138,7 +138,8 @@
 
                                     @if ($promptTemplate->is_active && $totalUsage === 0)
                                         <div class="mt-2">
-                                            <span class="inline-flex rounded-full bg-red-100 px-2.5 py-1 text-xs font-semibold text-red-700">
+                                            <span
+                                                class="inline-flex rounded-full bg-red-100 px-2.5 py-1 text-xs font-semibold text-red-700">
                                                 Unused Active Prompt
                                             </span>
                                         </div>

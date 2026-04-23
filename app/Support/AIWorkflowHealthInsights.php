@@ -144,7 +144,7 @@ class AIWorkflowHealthInsights
         return [
             'count' => collect($links)->sum('count'),
             'days' => self::STALE_DRAFT_DAYS,
-            'links' => array_values(array_filter($links, static fn (array $link): bool => $link['count'] > 0)),
+            'links' => array_values(array_filter($links, static fn(array $link): bool => $link['count'] > 0)),
         ];
     }
 
